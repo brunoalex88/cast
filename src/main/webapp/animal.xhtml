@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+<h:head>
+	<title>Adoção - Home</title>
+</h:head>
+<h:body>
+
+	<h:form>
+		<rich:panel header="Cadastro de Animais">
+			<rich:notifyMessages stayTime="2000" nonblocking="true" />
+			
+			<h:panelGrid columns="2" id="panelForm">
+				<h:outputLabel value="Tag de identificação: " />
+				<h:inputText value="#{animalController.animal.tag}" />
+			
+				<h:outputLabel value="Nome: " />
+				<h:inputText value="#{animalController.animal.nome}" />
+
+				<h:outputLabel value="Data do recolhimento: " />
+				<rich:calendar currentDate="" popup="true"
+					value="#{animalController.animal.dataRecolhimento}"
+					datePattern="dd/MM/yyyy" id="dataRecolhimento" />
+
+				<h:outputLabel value="Data da adoção: " />
+				<rich:calendar currentDate="" popup="true"
+					value="#{animalController.animal.dataAdocao}"
+					datePattern="dd/MM/yyyy" />
+			
+				<h:outputLabel value="Sexo: " />
+				<h:selectOneMenu value="#{animalController.animal.sexo}">
+					<f:selectItem itemLabel="" />
+					<f:selectItems value="#{animalController.sexos}"
+							var="sexo" itemValue="#{sexo}" itemLabel="#{sexo.value}" />
+				</h:selectOneMenu>
+				
+				<h:outputLabel value="Gênero: " />
+				<h:selectOneMenu value="#{animalController.animal.genero}">
+					<f:selectItem itemLabel="" />
+					<f:selectItems value="#{animalController.generos}"
+							var="genero" itemValue="#{genero}" itemLabel="#{genero.value}" />
+				</h:selectOneMenu>
+								
+				<a4j:commandButton value="Salvar"
+					action="#{animalController.addOrEdit(animalController.animal)}" 
+					render="panelForm panelList"/>
+					
+				<h:commandButton action="home?faces-redirect=true" value="Voltar" />					
+
+			</h:panelGrid>
+		</rich:panel>
+
+		<rich:panel header="Animais Cadastrados" id="panelList">
+			<rich:dataTable value="#{animalController.list()}" var="animal">
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="Tag" />
+					</f:facet>			
+					<h:outputLabel value="#{animal.tag}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="Nome" />
+					</f:facet>			
+					<h:outputLabel value="#{animal.nome}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="Data recolhimento" />
+					</f:facet>			
+					<h:outputLabel value="#{animal.dataRecolhimento}">
+						<f:convertDateTime pattern="dd/MM/yyyy"/>
+					</h:outputLabel>
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="Data adoção" />
+					</f:facet>			
+					<h:outputLabel value="#{animal.dataAdocao}">
+						<f:convertDateTime pattern="dd/MM/yyyy"/>
+					</h:outputLabel>
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="Gênero" />
+					</f:facet>			
+					<h:outputLabel value="#{animal.genero}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="Sexo" />
+					</f:facet>			
+					<h:outputLabel value="#{animal.sexo}" />
+				</rich:column>		
+				<rich:column>
+	                <a4j:commandLink render="panelForm" execute="@this"
+	                		resetValues="true" 
+		                    actionListener="#{animalController.clear()}">
+	                    <h:graphicImage name="img/edit.gif" alt="edit" />
+	                    <f:setPropertyActionListener target="#{animalController.animal}" value="#{animal}" />
+	                </a4j:commandLink>
+	                <a4j:commandLink render="@none" execute="@this"
+		                    oncomplete="#{rich:component('confirmPanel')}.show()">
+		                <f:setPropertyActionListener target="#{animalController.animal}" value="#{animal}" />
+	                    <h:graphicImage name="img/delete.gif" alt="delete" />
+	                </a4j:commandLink>	                  
+				</rich:column>				
+																								
+			</rich:dataTable>			
+		</rich:panel>
+		
+        <a4j:jsFunction name="remove" action="#{animalController.delete()}" render="panelList" execute="@this"
+            	oncomplete="#{rich:component('confirmPanel')}.hide();" />		
+		
+        <rich:popupPanel id="confirmPanel" autosized="true">
+            	Tem certeza que deseja excluir esse Animal ?
+            <a4j:commandButton value="Cancelar" onclick="#{rich:component('confirmPanel')}.hide(); return false;" />
+            <a4j:commandButton value="Excluir" onclick="remove(); return false;" />
+        </rich:popupPanel>				
+		
+	</h:form>
+	
+</h:body>
+</html>

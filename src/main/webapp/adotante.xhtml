@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+<h:head>
+	<title>RecAdo - Controle de Adotantes</title>
+</h:head>
+<h:body>	
+	<h:form>
+		<rich:panel header="Cadastro de Adotantes">
+			<rich:notifyMessages stayTime="2000" nonblocking="true" />
+			
+			<h:panelGrid columns="2" id="panelForm">
+				<h:outputLabel value="Nome: " />
+				<h:inputText value="#{adotanteController.adotante.nome}" />
+
+				<a4j:commandButton value="Salvar"
+					action="#{adotanteController.addOrEdit(adotanteController.adotante)}" 
+					render="panelForm"/>				
+				
+			</h:panelGrid>	
+		</rich:panel>
+			
+	</h:form>
+
+</h:body>
+</html>
