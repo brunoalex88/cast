@@ -5,15 +5,36 @@
 	xmlns:a4j="http://richfaces.org/a4j"
 	xmlns:rich="http://richfaces.org/rich">
 <h:head>
-	<title>Adoção - Home</title>
+	<title>#{msg['home.title']}</title>
 </h:head>
 <h:body>
-
+	<h:outputStylesheet library="css" name="bootstrap.css"  />
+	<h:outputStylesheet library="css" name="base.css"  />
+	<f:loadBundle basename="com.obruno.adocao.messages" var="msg"/>
+	
 	<h:form>
-		<rich:panel header="Cadastro de Animais">
-			<h:commandButton action="animal?faces-redirect=true" value="Cadastro de Animais" />
-			<h:commandButton action="adotante?faces-redirect=true" value="Cadastro de Adotantes" />
-		</rich:panel>
+	
+		<div class="container">
+			
+			<div class="jumbotron">
+				<h2 class="center">#{msg['home.header.title']}</h2>
+			</div>
+		
+			<div class="row">
+				<div class="col-md-6 center">
+					<a href="animal.xhtml" class="btn btn-primary" 
+							role="button" style="text-decoration: none;">
+						#{msg['home.btn.controle.animais']}
+					</a>
+				</div>
+				<div class="col-md-6 center">
+					<a href="adotante.xhtml" class="btn btn-primary" 
+							role="button" style="text-decoration: none;">
+						#{msg['home.btn.controle.adotantes']}
+					</a>
+				</div>				
+			</div>
+		</div>
 		
 	</h:form>
 	

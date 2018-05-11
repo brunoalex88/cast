@@ -16,12 +16,165 @@
 				<h:outputLabel value="Nome: " />
 				<h:inputText value="#{adotanteController.adotante.nome}" />
 
+				<h:outputLabel value="RG: " />
+				<h:inputText value="#{adotanteController.adotante.rg}" />				
+
+				<h:outputLabel value="CPF: " />
+				<h:inputText value="#{adotanteController.adotante.cpf}" />
+
+				<h:outputLabel value="Telefone: " />
+				<h:inputText value="#{adotanteController.adotante.telefone}" />
+
+				<h:outputLabel value="Profissão: " />
+				<h:inputText value="#{adotanteController.adotante.profissao}" />
+
+				<h:outputLabel value="Data de nascimento: " />
+				<rich:calendar currentDate="" popup="true"
+					value="#{adotanteController.adotante.dataNascimento}"
+					datePattern="dd/MM/yyyy" />
+					
+				<h:outputLabel value="Sexo: " />
+				<h:selectOneMenu value="#{adotanteController.adotante.sexo}">
+					<f:selectItem itemLabel="" />
+					<f:selectItems value="#{adotanteController.sexos}"
+							var="sexo" itemValue="#{sexo}" itemLabel="#{sexo.value}" />
+				</h:selectOneMenu>					
+
+				<h:outputLabel value="Endereço: " />
+				<h:inputText value="#{adotanteController.adotante.endereco}" />
+				
+				<h:outputLabel value="Bairro: " />
+				<h:inputText value="#{adotanteController.adotante.bairro}" />
+				
+				<h:outputLabel value="Número: " />
+				<h:inputText value="#{adotanteController.adotante.numero}" />
+				
+				<h:outputLabel value="Quantidade de animais em casa: " />
+				<h:inputText value="#{adotanteController.adotante.quantidadeDeAnimais}" />
+				
+				<h:outputLabel value="Quantidade de moradores na casa: " />
+				<h:inputText value="#{adotanteController.adotante.quantMoradores}" />																
+
+				<h:outputLabel value="Área da residência (m²): " />
+				<h:inputText value="#{adotanteController.adotante.areaLocal}" />
+
 				<a4j:commandButton value="Salvar"
 					action="#{adotanteController.addOrEdit(adotanteController.adotante)}" 
-					render="panelForm"/>				
+					render="panelForm panelList"/>
+
+				<a4j:commandButton value="Voltar"
+					action="home" />
 				
 			</h:panelGrid>	
 		</rich:panel>
+
+		<rich:panel header="Adotantes Cadastrados" id="panelList">
+			<rich:dataTable value="#{adotanteController.list()}" var="adotante">
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="Nome" />
+					</f:facet>			
+					<h:outputLabel value="#{adotante.nome}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="RG" />
+					</f:facet>			
+					<h:outputLabel value="#{adotante.rg}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="CPF" />
+					</f:facet>			
+					<h:outputLabel value="#{adotante.cpf}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="Data Nasc" />
+					</f:facet>			
+					<h:outputLabel value="#{adotante.dataNascimento}">
+						<f:convertDateTime pattern="dd/MM/yyyy"/>
+					</h:outputLabel>
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="Telefone" />
+					</f:facet>			
+					<h:outputLabel value="#{adotante.telefone}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="Sexo" />
+					</f:facet>			
+					<h:outputLabel value="#{adotante.sexo}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="Endereço" />
+					</f:facet>			
+					<h:outputLabel value="#{adotante.endereco}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="Bairro" />
+					</f:facet>			
+					<h:outputLabel value="#{adotante.bairro}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="Número" />
+					</f:facet>			
+					<h:outputLabel value="#{adotante.numero}" />
+				</rich:column>						
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="Qtd animais" />
+					</f:facet>			
+					<h:outputLabel value="#{adotante.quantidadeDeAnimais}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="Telefone" />
+					</f:facet>			
+					<h:outputLabel value="#{adotante.telefone}" />
+				</rich:column>								
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="Qtd moradores" />
+					</f:facet>			
+					<h:outputLabel value="#{adotante.quantMoradores}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="Área moradia" />
+					</f:facet>			
+					<h:outputLabel value="#{adotante.areaLocal}" />
+				</rich:column>												
+				<rich:column>				
+	                <a4j:commandLink render="panelForm" execute="@this"
+	                		resetValues="true" 
+		                    actionListener="#{adotanteController.clear()}">
+	                    <h:graphicImage name="img/edit.gif" alt="edit" />
+	                    <f:setPropertyActionListener target="#{adotanteController.adotante}" value="#{adotante}" />
+	                </a4j:commandLink>
+	                <a4j:commandLink render="@none" execute="@this"
+		                    oncomplete="#{rich:component('confirmPanel')}.show()">
+		                <f:setPropertyActionListener target="#{adotanteController.adotante}" value="#{adotante}" />
+	                    <h:graphicImage name="img/delete.gif" alt="delete" />
+	                </a4j:commandLink>	                  
+				</rich:column>				
+																								
+			</rich:dataTable>			
+		</rich:panel>
+		
+        <a4j:jsFunction name="remove" action="#{adotanteController.delete()}" render="panelList" execute="@this"
+            	oncomplete="#{rich:component('confirmPanel')}.hide();" />
+		
+        <rich:popupPanel id="confirmPanel" autosized="true">
+            	Tem certeza que deseja excluir este Adotante ?
+            <a4j:commandButton value="Cancelar" onclick="#{rich:component('confirmPanel')}.hide(); return false;" />
+            <a4j:commandButton value="Excluir" onclick="remove(); return false;" />
+        </rich:popupPanel>
 			
 	</h:form>
 

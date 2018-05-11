@@ -74,6 +74,7 @@ public class AdotanteController {
 		getAdotante().setQuantMoradores(null);
 		getAdotante().setRg(null);
 		getAdotante().setSexo(null);
+		getAdotante().setTelefone(null);
 	}		
 	
 	public Adotante getAdotante() {

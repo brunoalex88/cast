@@ -5,71 +5,72 @@
 	xmlns:a4j="http://richfaces.org/a4j"
 	xmlns:rich="http://richfaces.org/rich">
 <h:head>
-	<title>Adoção - Home</title>
+	<title>#{msg['animal.title']}</title>
 </h:head>
 <h:body>
-
+	<f:loadBundle basename="com.obruno.adocao.messages" var="msg"/>
 	<h:form>
-		<rich:panel header="Cadastro de Animais">
+		<rich:panel header="#{msg['animal.panel.form']}">
 			<rich:notifyMessages stayTime="2000" nonblocking="true" />
 			
 			<h:panelGrid columns="2" id="panelForm">
-				<h:outputLabel value="Tag de identificação: " />
+				<h:outputLabel value="#{msg['animal.form.tag']}" />
 				<h:inputText value="#{animalController.animal.tag}" />
 			
-				<h:outputLabel value="Nome: " />
+				<h:outputLabel value="#{msg['animal.form.nome']}" />
 				<h:inputText value="#{animalController.animal.nome}" />
 
-				<h:outputLabel value="Data do recolhimento: " />
+				<h:outputLabel value="#{msg['animal.form.data.recolhimento']}" />
 				<rich:calendar currentDate="" popup="true"
 					value="#{animalController.animal.dataRecolhimento}"
 					datePattern="dd/MM/yyyy" id="dataRecolhimento" />
 
-				<h:outputLabel value="Data da adoção: " />
+				<h:outputLabel value="#{msg['animal.form.data.adocao']}" />
 				<rich:calendar currentDate="" popup="true"
 					value="#{animalController.animal.dataAdocao}"
 					datePattern="dd/MM/yyyy" />
 			
-				<h:outputLabel value="Sexo: " />
+				<h:outputLabel value="#{msg['animal.form.sexo']}" />
 				<h:selectOneMenu value="#{animalController.animal.sexo}">
 					<f:selectItem itemLabel="" />
 					<f:selectItems value="#{animalController.sexos}"
 							var="sexo" itemValue="#{sexo}" itemLabel="#{sexo.value}" />
 				</h:selectOneMenu>
 				
-				<h:outputLabel value="Gênero: " />
+				<h:outputLabel value="#{msg['animal.form.genero']}" />
 				<h:selectOneMenu value="#{animalController.animal.genero}">
 					<f:selectItem itemLabel="" />
 					<f:selectItems value="#{animalController.generos}"
 							var="genero" itemValue="#{genero}" itemLabel="#{genero.value}" />
 				</h:selectOneMenu>
 								
-				<a4j:commandButton value="Salvar"
+				<a4j:commandButton value="#{msg['animal.btn.salvar']}"
 					action="#{animalController.addOrEdit(animalController.animal)}" 
 					render="panelForm panelList"/>
-					
-				<h:commandButton action="home?faces-redirect=true" value="Voltar" />					
+
+				<a4j:commandButton value="#{msg['animal.btn.voltar']}"
+					action="#{animalController.home()}" />
 
 			</h:panelGrid>
 		</rich:panel>
 
-		<rich:panel header="Animais Cadastrados" id="panelList">
+		<rich:panel header="#{msg['animal.panel.list']}" id="panelList">
 			<rich:dataTable value="#{animalController.list()}" var="animal">
 				<rich:column>
 					<f:facet name="header">
-						<h:outputText value="Tag" />
+						<h:outputText value="#{msg['animal.list.tag']}" />
 					</f:facet>			
 					<h:outputLabel value="#{animal.tag}" />
 				</rich:column>
 				<rich:column>
 					<f:facet name="header">
-						<h:outputText value="Nome" />
+						<h:outputText value="#{msg['animal.list.nome']}" />
 					</f:facet>			
 					<h:outputLabel value="#{animal.nome}" />
 				</rich:column>
 				<rich:column>
 					<f:facet name="header">
-						<h:outputText value="Data recolhimento" />
+						<h:outputText value="#{msg['animal.list.data.recolhimento']}" />
 					</f:facet>			
 					<h:outputLabel value="#{animal.dataRecolhimento}">
 						<f:convertDateTime pattern="dd/MM/yyyy"/>
@@ -77,7 +78,7 @@
 				</rich:column>
 				<rich:column>
 					<f:facet name="header">
-						<h:outputText value="Data adoção" />
+						<h:outputText value="#{msg['animal.list.data.adocao']}" />
 					</f:facet>			
 					<h:outputLabel value="#{animal.dataAdocao}">
 						<f:convertDateTime pattern="dd/MM/yyyy"/>
@@ -85,13 +86,13 @@
 				</rich:column>
 				<rich:column>
 					<f:facet name="header">
-						<h:outputText value="Gênero" />
+						<h:outputText value="#{msg['animal.list.genero']}" />
 					</f:facet>			
 					<h:outputLabel value="#{animal.genero}" />
 				</rich:column>
 				<rich:column>
 					<f:facet name="header">
-						<h:outputText value="Sexo" />
+						<h:outputText value="#{msg['animal.list.sexo']}" />
 					</f:facet>			
 					<h:outputLabel value="#{animal.sexo}" />
 				</rich:column>		
@@ -116,9 +117,10 @@
             	oncomplete="#{rich:component('confirmPanel')}.hide();" />		
 		
         <rich:popupPanel id="confirmPanel" autosized="true">
-            	Tem certeza que deseja excluir esse Animal ?
-            <a4j:commandButton value="Cancelar" onclick="#{rich:component('confirmPanel')}.hide(); return false;" />
-            <a4j:commandButton value="Excluir" onclick="remove(); return false;" />
+            	#{msg['animal.confirm.text']}
+            <a4j:commandButton value="#{msg['animal.btn.cancelar']}" 
+            		onclick="#{rich:component('confirmPanel')}.hide(); return false;" />
+            <a4j:commandButton value="#{msg['animal.btn.excluir']}" onclick="remove(); return false;" />
         </rich:popupPanel>				
 		
 	</h:form>

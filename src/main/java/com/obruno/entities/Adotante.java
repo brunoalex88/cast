@@ -10,7 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 @Table(name = "adotante")
@@ -20,30 +21,45 @@ public class Adotante {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@NotNull(message = "Nome do adotante é obrigatório")
-	@Size(min=3, max=80, message="Quantidade mínima de caracteres é 3 e a máxima é 80")
+	@NotEmpty(message = "Nome do adotante é obrigatório")
 	private String nome;
 
+	@NotEmpty(message = "RG é obrigatório!")
 	private String rg;
+
+	@NotEmpty(message = "CPF é obrigatório!")
 	private String cpf;
 
 	@Column(name = "data_nascimento")
+	@NotNull(message = "Data de nascimento é obrigatória!")
 	private Date dataNascimento;
 
+	@NotEmpty(message = "Telefone é obrigatório!")
+	private String telefone;
+
 	@Enumerated
+	@NotNull(message = "Sexo é obrigatório!")
 	private Sexo sexo;
 
+	@NotEmpty(message = "Endereço é obrigatório!")
 	private String endereco;
+
+	@NotEmpty(message = "Bairro é obrigatório!")
 	private String bairro;
+
+	@NotEmpty(message = "Número é obrigatório!")
 	private String numero;
 
+	@NotNull(message = "Quantidade de animais na residência é obrigatório!")
 	@Column(name = "quant_animais")
 	private Integer quantidadeDeAnimais;
 	private String profissao;
 
+	@NotNull(message = "Quantidade de moradores é obrigatório!")
 	@Column(name = "quant_moradores")
 	private Integer quantMoradores;
 
+	@NotNull(message = "Área da residência é obrigatória")
 	@Column(name = "area_local")
 	private Integer areaLocal;
 
@@ -85,6 +101,14 @@ public class Adotante {
 
 	public void setDataNascimento(Date dataNascimento) {
 		this.dataNascimento = dataNascimento;
+	}
+
+	public String getTelefone() {
+		return telefone;
+	}
+
+	public void setTelefone(String telefone) {
+		this.telefone = telefone;
 	}
 
 	public Sexo getSexo() {
@@ -152,14 +176,6 @@ public class Adotante {
 	}
 
 	@Override
-	public String toString() {
-		return "Adotante [id=" + id + ", nome=" + nome + ", rg=" + rg + ", cpf=" + cpf + ", dataNascimento="
-				+ dataNascimento + ", sexo=" + sexo + ", endereco=" + endereco + ", bairro=" + bairro + ", numero="
-				+ numero + ", quantidadeDeAnimais=" + quantidadeDeAnimais + ", profissao=" + profissao
-				+ ", quantMoradores=" + quantMoradores + ", areaLocal=" + areaLocal + "]";
-	}
-
-	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -176,6 +192,7 @@ public class Adotante {
 		result = prime * result + ((quantidadeDeAnimais == null) ? 0 : quantidadeDeAnimais.hashCode());
 		result = prime * result + ((rg == null) ? 0 : rg.hashCode());
 		result = prime * result + ((sexo == null) ? 0 : sexo.hashCode());
+		result = prime * result + ((telefone == null) ? 0 : telefone.hashCode());
 		return result;
 	}
 
@@ -250,7 +267,20 @@ public class Adotante {
 			return false;
 		if (sexo != other.sexo)
 			return false;
+		if (telefone == null) {
+			if (other.telefone != null)
+				return false;
+		} else if (!telefone.equals(other.telefone))
+			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Adotante [id=" + id + ", nome=" + nome + ", rg=" + rg + ", cpf=" + cpf + ", dataNascimento="
+				+ dataNascimento + ", telefone=" + telefone + ", sexo=" + sexo + ", endereco=" + endereco + ", bairro="
+				+ bairro + ", numero=" + numero + ", quantidadeDeAnimais=" + quantidadeDeAnimais + ", profissao="
+				+ profissao + ", quantMoradores=" + quantMoradores + ", areaLocal=" + areaLocal + "]";
 	}
 
 }

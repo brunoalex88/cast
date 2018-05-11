@@ -47,6 +47,10 @@ public class AnimalController {
 		clear();
 	}
 	
+	public String home() {
+		return "home?faces-redirect=true";
+	}
+	
 	public void clear() {
 		getAnimal().setId(null);
 		getAnimal().setDataAdocao(null);
