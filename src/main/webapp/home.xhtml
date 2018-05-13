@@ -6,6 +6,7 @@
 	xmlns:rich="http://richfaces.org/rich">
 <h:head>
 	<title>#{msg['home.title']}</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
 </h:head>
 <h:body>
 	<h:outputStylesheet library="css" name="bootstrap.css"  />
@@ -15,8 +16,7 @@
 	<h:form>
 	
 		<div class="container">
-			
-			<div class="jumbotron">
+			<div class="jumbotron" style="margin-top: 20px;">
 				<h2 class="center">#{msg['home.header.title']}</h2>
 			</div>
 		
@@ -29,11 +29,12 @@
 				</div>
 				<div class="col-md-6 center">
 					<a href="adotante.xhtml" class="btn btn-primary" 
-							role="button" style="text-decoration: none;">
+							role="button">
 						#{msg['home.btn.controle.adotantes']}
 					</a>
 				</div>				
 			</div>
+			
 		</div>
 		
 	</h:form>

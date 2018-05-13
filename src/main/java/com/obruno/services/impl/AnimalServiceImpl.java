@@ -1,6 +1,7 @@
 package com.obruno.services.impl;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -12,13 +13,17 @@ import com.obruno.services.AnimalService;
 
 @Stateless
 public class AnimalServiceImpl implements AnimalService {
-
+	
+	private final Logger logger = Logger.getLogger(
+			this.getClass().getName());
+		
 	@PersistenceContext(name="AdocaoApp")
 	private EntityManager em;
 
 	@Override
 	public void add(Animal animal) {
 		em.persist(animal);
+		logger.info("Animal cadastrado: " + animal.toString());
 	}
 	
 	@Override
@@ -38,11 +43,13 @@ public class AnimalServiceImpl implements AnimalService {
 	@Override
 	public void remove(Animal animal) {
 		em.remove(em.getReference(Animal.class, animal.getId()));
+		logger.info("Animal removido!");
 	}
 	
 	@Override
 	public void merge(Animal animal) {
 		em.merge(animal);		
+		logger.info("Animal salvo!");
 	}
 	
 }

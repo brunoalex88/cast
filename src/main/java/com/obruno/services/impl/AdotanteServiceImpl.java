@@ -8,6 +8,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import com.obruno.entities.Adotante;
+import com.obruno.entities.Animal;
 import com.obruno.services.AdotanteService;
 
 @Stateless
@@ -27,11 +28,11 @@ public class AdotanteServiceImpl implements AdotanteService {
 	}
 
 	@Override
-	public Adotante getById(String id) {
-		TypedQuery<Adotante> query = em.createQuery("from Adotante a where a.id = :id", Adotante.class);
+	public Adotante getById(Integer id) {
+		TypedQuery<Adotante> query = 
+				em.createQuery("from Adotante a where a.id = :id", Adotante.class);
 
-		Adotante a = query.setParameter("id", Integer.parseInt(id)).getSingleResult();
-		return a;
+		return query.setParameter("id", id).getSingleResult();
 	}
 
 	@Override
@@ -42,6 +43,13 @@ public class AdotanteServiceImpl implements AdotanteService {
 	@Override
 	public void merge(Adotante adotante) {
 		em.merge(adotante);
+	}
+	
+	@Override
+	public List<Animal> getAdotados(Integer id) {
+		TypedQuery<Animal> query = 
+				em.createQuery("from Animal a where a.adotante.id = :id", Animal.class);
+		return query.setParameter("id", id).getResultList(); 
 	}
 
 }

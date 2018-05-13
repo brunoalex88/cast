@@ -1,13 +1,17 @@
 package com.obruno.entities;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -50,6 +54,8 @@ public class Adotante {
 	@NotEmpty(message = "Número é obrigatório!")
 	private String numero;
 
+	private String cidade;
+
 	@NotNull(message = "Quantidade de animais na residência é obrigatório!")
 	@Column(name = "quant_animais")
 	private Integer quantidadeDeAnimais;
@@ -62,6 +68,9 @@ public class Adotante {
 	@NotNull(message = "Área da residência é obrigatória")
 	@Column(name = "area_local")
 	private Integer areaLocal;
+
+	@OneToMany(mappedBy = "adotante", targetEntity = Animal.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private List<Animal> animais;
 
 	public Integer getId() {
 		return id;
@@ -143,6 +152,14 @@ public class Adotante {
 		this.numero = numero;
 	}
 
+	public String getCidade() {
+		return cidade;
+	}
+
+	public void setCidade(String cidade) {
+		this.cidade = cidade;
+	}
+
 	public Integer getQuantidadeDeAnimais() {
 		return quantidadeDeAnimais;
 	}
@@ -175,12 +192,22 @@ public class Adotante {
 		this.areaLocal = areaLocal;
 	}
 
+	public List<Animal> getAnimais() {
+		return animais;
+	}
+
+	public void setAnimais(List<Animal> animais) {
+		this.animais = animais;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((animais == null) ? 0 : animais.hashCode());
 		result = prime * result + ((areaLocal == null) ? 0 : areaLocal.hashCode());
 		result = prime * result + ((bairro == null) ? 0 : bairro.hashCode());
+		result = prime * result + ((cidade == null) ? 0 : cidade.hashCode());
 		result = prime * result + ((cpf == null) ? 0 : cpf.hashCode());
 		result = prime * result + ((dataNascimento == null) ? 0 : dataNascimento.hashCode());
 		result = prime * result + ((endereco == null) ? 0 : endereco.hashCode());
@@ -205,6 +232,11 @@ public class Adotante {
 		if (getClass() != obj.getClass())
 			return false;
 		Adotante other = (Adotante) obj;
+		if (animais == null) {
+			if (other.animais != null)
+				return false;
+		} else if (!animais.equals(other.animais))
+			return false;
 		if (areaLocal == null) {
 			if (other.areaLocal != null)
 				return false;
@@ -214,6 +246,11 @@ public class Adotante {
 			if (other.bairro != null)
 				return false;
 		} else if (!bairro.equals(other.bairro))
+			return false;
+		if (cidade == null) {
+			if (other.cidade != null)
+				return false;
+		} else if (!cidade.equals(other.cidade))
 			return false;
 		if (cpf == null) {
 			if (other.cpf != null)
@@ -279,8 +316,8 @@ public class Adotante {
 	public String toString() {
 		return "Adotante [id=" + id + ", nome=" + nome + ", rg=" + rg + ", cpf=" + cpf + ", dataNascimento="
 				+ dataNascimento + ", telefone=" + telefone + ", sexo=" + sexo + ", endereco=" + endereco + ", bairro="
-				+ bairro + ", numero=" + numero + ", quantidadeDeAnimais=" + quantidadeDeAnimais + ", profissao="
-				+ profissao + ", quantMoradores=" + quantMoradores + ", areaLocal=" + areaLocal + "]";
+				+ bairro + ", numero=" + numero + ", cidade=" + cidade + ", quantidadeDeAnimais=" + quantidadeDeAnimais
+				+ ", profissao=" + profissao + ", quantMoradores=" + quantMoradores + ", areaLocal=" + areaLocal + "]";
 	}
 
 }

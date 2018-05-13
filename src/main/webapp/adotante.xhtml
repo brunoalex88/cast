@@ -5,92 +5,101 @@
 	xmlns:a4j="http://richfaces.org/a4j"
 	xmlns:rich="http://richfaces.org/rich">
 <h:head>
-	<title>RecAdo - Controle de Adotantes</title>
+	<title>#{msg['adotante.title']}</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<h:outputStylesheet library="css" name="base.css" />
 </h:head>
 <h:body>	
+	<f:loadBundle basename="com.obruno.adocao.messages" var="msg"/>
 	<h:form>
-		<rich:panel header="Cadastro de Adotantes">
+		<rich:panel header="#{msg['adotante.panel.form']}">
 			<rich:notifyMessages stayTime="2000" nonblocking="true" />
 			
 			<h:panelGrid columns="2" id="panelForm">
-				<h:outputLabel value="Nome: " />
+				<h:outputLabel value="#{msg['adotante.form.nome']}" />
 				<h:inputText value="#{adotanteController.adotante.nome}" />
 
-				<h:outputLabel value="RG: " />
-				<h:inputText value="#{adotanteController.adotante.rg}" />				
+				<h:outputLabel value="#{msg['adotante.form.rg']}" />
+				<h:inputText value="#{adotanteController.adotante.rg}" 
+					onkeypress="if(event.which &lt; 48 || event.which &gt; 57 ) if(event.which != 8) return false;"/>				
 
-				<h:outputLabel value="CPF: " />
-				<h:inputText value="#{adotanteController.adotante.cpf}" />
+				<h:outputLabel value="#{msg['adotante.form.cpf']}" />
+				<h:inputText value="#{adotanteController.adotante.cpf}" 
+					onkeypress="if(event.which &lt; 48 || event.which &gt; 57 ) if(event.which != 8) return false;"/>
 
-				<h:outputLabel value="Telefone: " />
-				<h:inputText value="#{adotanteController.adotante.telefone}" />
+				<h:outputLabel value="#{msg['adotante.form.telefone']}" />
+				<h:inputText value="#{adotanteController.adotante.telefone}" 
+					onkeypress="if(event.which &lt; 48 || event.which &gt; 57 ) if(event.which != 8) return false;"/>
 
-				<h:outputLabel value="Profissão: " />
+				<h:outputLabel value="#{msg['adotante.form.profissao']}" />
 				<h:inputText value="#{adotanteController.adotante.profissao}" />
 
-				<h:outputLabel value="Data de nascimento: " />
+				<h:outputLabel value="#{msg['adotante.form.data.nascimento']}" />
 				<rich:calendar currentDate="" popup="true"
 					value="#{adotanteController.adotante.dataNascimento}"
 					datePattern="dd/MM/yyyy" />
 					
-				<h:outputLabel value="Sexo: " />
+				<h:outputLabel value="#{msg['adotante.form.sexo']}" />
 				<h:selectOneMenu value="#{adotanteController.adotante.sexo}">
 					<f:selectItem itemLabel="" />
 					<f:selectItems value="#{adotanteController.sexos}"
 							var="sexo" itemValue="#{sexo}" itemLabel="#{sexo.value}" />
 				</h:selectOneMenu>					
 
-				<h:outputLabel value="Endereço: " />
+				<h:outputLabel value="#{msg['adotante.form.endereco']}" />
 				<h:inputText value="#{adotanteController.adotante.endereco}" />
 				
-				<h:outputLabel value="Bairro: " />
+				<h:outputLabel value="#{msg['adotante.form.bairro']}" />
 				<h:inputText value="#{adotanteController.adotante.bairro}" />
 				
-				<h:outputLabel value="Número: " />
+				<h:outputLabel value="#{msg['adotante.form.numero']}" />
 				<h:inputText value="#{adotanteController.adotante.numero}" />
 				
-				<h:outputLabel value="Quantidade de animais em casa: " />
-				<h:inputText value="#{adotanteController.adotante.quantidadeDeAnimais}" />
+				<h:outputLabel value="#{msg['adotante.form.quantidade.animais']}" />
+				<h:inputText value="#{adotanteController.adotante.quantidadeDeAnimais}" 
+					onkeypress="if(event.which &lt; 48 || event.which &gt; 57 ) if(event.which != 8) return false;"/>
 				
-				<h:outputLabel value="Quantidade de moradores na casa: " />
-				<h:inputText value="#{adotanteController.adotante.quantMoradores}" />																
+				<h:outputLabel value="#{msg['adotante.form.quantidade.moradores']}" />
+				<h:inputText value="#{adotanteController.adotante.quantMoradores}" 
+					onkeypress="if(event.which &lt; 48 || event.which &gt; 57 ) if(event.which != 8) return false;"/>								
 
-				<h:outputLabel value="Área da residência (m²): " />
-				<h:inputText value="#{adotanteController.adotante.areaLocal}" />
+				<h:outputLabel value="#{msg['adotante.form.area']}" />
+				<h:inputText value="#{adotanteController.adotante.areaLocal}" 
+					onkeypress="if(event.which &lt; 48 || event.which &gt; 57 ) if(event.which != 8) return false;"/>
 
-				<a4j:commandButton value="Salvar"
-					action="#{adotanteController.addOrEdit(adotanteController.adotante)}" 
+				<a4j:commandButton value="#{msg['adotante.btn.salvar']}"
+					action="#{adotanteController.addOrEdit()}" 
 					render="panelForm panelList"/>
 
-				<a4j:commandButton value="Voltar"
-					action="home" />
+				<h:commandButton action="home?faces-redirect=true" 
+						value="#{msg['adotante.btn.voltar']}" immediate="true" />				
 				
 			</h:panelGrid>	
 		</rich:panel>
 
-		<rich:panel header="Adotantes Cadastrados" id="panelList">
+		<rich:panel header="#{msg['adotante.panel.list']}" id="panelList">
 			<rich:dataTable value="#{adotanteController.list()}" var="adotante">
 				<rich:column>
 					<f:facet name="header">
-						<h:outputText value="Nome" />
+						<h:outputText value="#{msg['adotante.list.nome']}" />
 					</f:facet>			
 					<h:outputLabel value="#{adotante.nome}" />
 				</rich:column>
 				<rich:column>
 					<f:facet name="header">
-						<h:outputText value="RG" />
+						<h:outputText value="#{msg['adotante.list.rg']}" />
 					</f:facet>			
 					<h:outputLabel value="#{adotante.rg}" />
 				</rich:column>
 				<rich:column>
 					<f:facet name="header">
-						<h:outputText value="CPF" />
+						<h:outputText value="#{msg['adotante.list.cpf']}" />
 					</f:facet>			
 					<h:outputLabel value="#{adotante.cpf}" />
 				</rich:column>
 				<rich:column>
 					<f:facet name="header">
-						<h:outputText value="Data Nasc" />
+						<h:outputText value="#{msg['adotante.list.data.nascimento']}" />
 					</f:facet>			
 					<h:outputLabel value="#{adotante.dataNascimento}">
 						<f:convertDateTime pattern="dd/MM/yyyy"/>
@@ -98,58 +107,65 @@
 				</rich:column>
 				<rich:column>
 					<f:facet name="header">
-						<h:outputText value="Telefone" />
+						<h:outputText value="#{msg['adotante.list.telefone']}" />
 					</f:facet>			
 					<h:outputLabel value="#{adotante.telefone}" />
 				</rich:column>
 				<rich:column>
 					<f:facet name="header">
-						<h:outputText value="Sexo" />
+						<h:outputText value="#{msg['adotante.list.sexo']}" />
 					</f:facet>			
 					<h:outputLabel value="#{adotante.sexo}" />
 				</rich:column>
 				<rich:column>
 					<f:facet name="header">
-						<h:outputText value="Endereço" />
+						<h:outputText value="#{msg['adotante.list.endereco']}" />
 					</f:facet>			
 					<h:outputLabel value="#{adotante.endereco}" />
 				</rich:column>
 				<rich:column>
 					<f:facet name="header">
-						<h:outputText value="Bairro" />
+						<h:outputText value="#{msg['adotante.list.bairro']}" />
 					</f:facet>			
 					<h:outputLabel value="#{adotante.bairro}" />
 				</rich:column>
 				<rich:column>
 					<f:facet name="header">
-						<h:outputText value="Número" />
+						<h:outputText value="#{msg['adotante.list.numero']}" />
 					</f:facet>			
 					<h:outputLabel value="#{adotante.numero}" />
 				</rich:column>						
 				<rich:column>
 					<f:facet name="header">
-						<h:outputText value="Qtd animais" />
+						<h:outputText value="#{msg['adotante.list.quantidade.animais']}" />
 					</f:facet>			
 					<h:outputLabel value="#{adotante.quantidadeDeAnimais}" />
-				</rich:column>
+				</rich:column>					
 				<rich:column>
 					<f:facet name="header">
-						<h:outputText value="Telefone" />
-					</f:facet>			
-					<h:outputLabel value="#{adotante.telefone}" />
-				</rich:column>								
-				<rich:column>
-					<f:facet name="header">
-						<h:outputText value="Qtd moradores" />
+						<h:outputText value="#{msg['adotante.list.quantidade.moradores']}" />
 					</f:facet>			
 					<h:outputLabel value="#{adotante.quantMoradores}" />
 				</rich:column>
 				<rich:column>
 					<f:facet name="header">
-						<h:outputText value="Área moradia" />
+						<h:outputText value="#{msg['adotante.list.area']}" />
 					</f:facet>			
 					<h:outputLabel value="#{adotante.areaLocal}" />
-				</rich:column>												
+				</rich:column>		
+				<rich:column class="center">
+					<f:facet name="header">
+						<h:outputText value="#{msg['adotante.list.adotados']}" />		
+					</f:facet>							
+					<a4j:commandLink render="@none" execute="@this"
+								action="#{adotanteController.adotados()}"
+								oncomplete="#{rich:component('adotadosPanel')}.show()">
+							<f:setPropertyActionListener value="#{adotante.id}" 
+									target="#{adotanteController.adotante.id}" />
+						<h:graphicImage name="img/search.png" alt="search" />
+						
+					</a4j:commandLink>
+				</rich:column>										
 				<rich:column>				
 	                <a4j:commandLink render="panelForm" execute="@this"
 	                		resetValues="true" 
@@ -171,11 +187,49 @@
             	oncomplete="#{rich:component('confirmPanel')}.hide();" />
 		
         <rich:popupPanel id="confirmPanel" autosized="true">
-            	Tem certeza que deseja excluir este Adotante ?
-            <a4j:commandButton value="Cancelar" onclick="#{rich:component('confirmPanel')}.hide(); return false;" />
-            <a4j:commandButton value="Excluir" onclick="remove(); return false;" />
+            	#{msg['adotante.confirm.text']}
+            <a4j:commandButton value="#{msg['adotante.btn.cancelar']}" onclick="#{rich:component('confirmPanel')}.hide(); return false;" />
+            <a4j:commandButton value="#{msg['adotante.btn.excluir']}" onclick="remove(); return false;" />
         </rich:popupPanel>
-			
+        
+	    <rich:popupPanel id="adotadosPanel" modal="true" autosized="true" 
+	    		header="#{msg['adotante.panel.adotados']}">
+	        <f:facet name="controls">
+	            <h:outputLink value="#" onclick="#{rich:component('adotadosPanel')}.hide(); return false;"
+	            		style="color: inherit">X</h:outputLink>
+			</f:facet>
+
+			<rich:dataTable value="#{adotanteController.adotados()}" var="animal">
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="#{msg['adotante.adotados.tag']}" />
+					</f:facet>
+					<h:outputLabel value="#{animal.nome}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="#{msg['adotante.adotados.nome']}" />
+					</f:facet>
+					<h:outputLabel value="#{animal.nome}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="#{msg['adotante.adotados.data.adocao']}" />
+					</f:facet>
+					<h:outputLabel value="#{animal.dataAdocao}">
+						<f:convertDateTime pattern="dd/MM/yyyy"/>
+					</h:outputLabel>
+				</rich:column>
+				<rich:column class="center">
+					<f:facet name="header">
+						<h:outputText value="#{msg['adotante.adotados.dias.adotado']}" />
+					</f:facet>
+					<h:outputLabel 
+							value="#{adocaoController.diasAdotado(animal.dataAdocao)}" />					
+				</rich:column>													
+			</rich:dataTable>
+
+		</rich:popupPanel>
 	</h:form>
 
 </h:body>

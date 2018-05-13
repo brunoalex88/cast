@@ -6,6 +6,8 @@
 	xmlns:rich="http://richfaces.org/rich">
 <h:head>
 	<title>#{msg['animal.title']}</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<h:outputStylesheet library="css" name="base.css" />
 </h:head>
 <h:body>
 	<f:loadBundle basename="com.obruno.adocao.messages" var="msg"/>
@@ -22,13 +24,10 @@
 
 				<h:outputLabel value="#{msg['animal.form.data.recolhimento']}" />
 				<rich:calendar currentDate="" popup="true"
-					value="#{animalController.animal.dataRecolhimento}"
-					datePattern="dd/MM/yyyy" id="dataRecolhimento" />
-
-				<h:outputLabel value="#{msg['animal.form.data.adocao']}" />
-				<rich:calendar currentDate="" popup="true"
-					value="#{animalController.animal.dataAdocao}"
-					datePattern="dd/MM/yyyy" />
+						value="#{animalController.animal.dataRecolhimento}"
+						datePattern="dd/MM/yyyy" id="dataRecolhimento">
+					<f:validator validatorId="com.obruno.validators.MaxDateValidator" />
+				</rich:calendar>
 			
 				<h:outputLabel value="#{msg['animal.form.sexo']}" />
 				<h:selectOneMenu value="#{animalController.animal.sexo}">
@@ -45,83 +44,293 @@
 				</h:selectOneMenu>
 								
 				<a4j:commandButton value="#{msg['animal.btn.salvar']}"
-					action="#{animalController.addOrEdit(animalController.animal)}" 
-					render="panelForm panelList"/>
-
-				<a4j:commandButton value="#{msg['animal.btn.voltar']}"
-					action="#{animalController.home()}" />
+						action="#{animalController.addOrEdit(animalController.animal)}" 
+						render="panelForm panelLivre panelAdotados"/>
+				
+				<h:commandButton action="home?faces-redirect=true" 
+						value="#{msg['animal.btn.voltar']}" immediate="true" />
 
 			</h:panelGrid>
 		</rich:panel>
-
-		<rich:panel header="#{msg['animal.panel.list']}" id="panelList">
-			<rich:dataTable value="#{animalController.list()}" var="animal">
-				<rich:column>
-					<f:facet name="header">
-						<h:outputText value="#{msg['animal.list.tag']}" />
-					</f:facet>			
-					<h:outputLabel value="#{animal.tag}" />
-				</rich:column>
-				<rich:column>
-					<f:facet name="header">
-						<h:outputText value="#{msg['animal.list.nome']}" />
-					</f:facet>			
-					<h:outputLabel value="#{animal.nome}" />
-				</rich:column>
-				<rich:column>
-					<f:facet name="header">
-						<h:outputText value="#{msg['animal.list.data.recolhimento']}" />
-					</f:facet>			
-					<h:outputLabel value="#{animal.dataRecolhimento}">
-						<f:convertDateTime pattern="dd/MM/yyyy"/>
-					</h:outputLabel>
-				</rich:column>
-				<rich:column>
-					<f:facet name="header">
-						<h:outputText value="#{msg['animal.list.data.adocao']}" />
-					</f:facet>			
-					<h:outputLabel value="#{animal.dataAdocao}">
-						<f:convertDateTime pattern="dd/MM/yyyy"/>
-					</h:outputLabel>
-				</rich:column>
-				<rich:column>
-					<f:facet name="header">
-						<h:outputText value="#{msg['animal.list.genero']}" />
-					</f:facet>			
-					<h:outputLabel value="#{animal.genero}" />
-				</rich:column>
-				<rich:column>
-					<f:facet name="header">
-						<h:outputText value="#{msg['animal.list.sexo']}" />
-					</f:facet>			
-					<h:outputLabel value="#{animal.sexo}" />
-				</rich:column>		
-				<rich:column>
-	                <a4j:commandLink render="panelForm" execute="@this"
-	                		resetValues="true" 
-		                    actionListener="#{animalController.clear()}">
-	                    <h:graphicImage name="img/edit.gif" alt="edit" />
-	                    <f:setPropertyActionListener target="#{animalController.animal}" value="#{animal}" />
-	                </a4j:commandLink>
-	                <a4j:commandLink render="@none" execute="@this"
-		                    oncomplete="#{rich:component('confirmPanel')}.show()">
-		                <f:setPropertyActionListener target="#{animalController.animal}" value="#{animal}" />
-	                    <h:graphicImage name="img/delete.gif" alt="delete" />
-	                </a4j:commandLink>	                  
-				</rich:column>				
-																								
-			</rich:dataTable>			
-		</rich:panel>
 		
-        <a4j:jsFunction name="remove" action="#{animalController.delete()}" render="panelList" execute="@this"
-            	oncomplete="#{rich:component('confirmPanel')}.hide();" />		
+		<h:panelGrid columns="2" styleClass="w-all">
+			<rich:panel header="#{msg['animal.panel.livre']}" id="panelLivre">
+				<rich:dataTable value="#{adocaoController.listDisponiveis()}" var="animal">
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['animal.livre.tag']}" />
+						</f:facet>			
+						<h:outputLabel value="#{animal.tag}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['animal.livre.nome']}" />
+						</f:facet>			
+						<h:outputLabel value="#{animal.nome}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['animal.livre.data.recolhimento']}" />
+						</f:facet>			
+						<h:outputLabel value="#{animal.dataRecolhimento}">
+							<f:convertDateTime pattern="dd/MM/yyyy"/>
+						</h:outputLabel>
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['animal.livre.data.adocao']}" />
+						</f:facet>			
+						<a4j:commandLink value="#{animal.dataAdocao != null
+									? animal.dataAdocao : msg['animal.livre.disponivel']}"
+								execute="@this" render="@none" style="text-decoration: none;"
+								oncomplete="#{rich:component('modalAdocao')}.show()">
+							<f:setPropertyActionListener value="#{animal}" target="#{adocaoController.animal}" />
+						</a4j:commandLink>
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['animal.livre.dias.recolhimento']}" />
+						</f:facet>
+						<h:outputLabel 
+								value="#{animal.dataAdocao != null 
+									? '-' : adocaoController.diasRecolhimento(animal.dataRecolhimento)}" />
+					</rich:column>				
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['animal.livre.genero']}" />
+						</f:facet>			
+						<h:outputLabel value="#{animal.genero}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['animal.livre.sexo']}" />
+						</f:facet>			
+						<h:outputLabel value="#{animal.sexo}" />
+					</rich:column>		
+					<rich:column>
+		                <a4j:commandLink render="panelForm" execute="@this"
+		                		resetValues="true" 
+			                    actionListener="#{animalController.clear()}">
+		                    <h:graphicImage name="img/edit.gif" alt="edit" />
+		                    <f:setPropertyActionListener target="#{animalController.animal}" value="#{animal}" />
+		                </a4j:commandLink>
+		                <a4j:commandLink render="@none" execute="@this"
+			                    oncomplete="#{rich:component('confirmPanel')}.show()">
+			                <f:setPropertyActionListener target="#{animalController.animal}" value="#{animal}" />
+		                    <h:graphicImage name="img/delete.gif" alt="delete" />
+		                </a4j:commandLink>	                  
+					</rich:column>				
+																									
+				</rich:dataTable>
+			</rich:panel>
+			<rich:panel header="#{msg['animal.panel.adotado']}" id="panelAdotados">
+				<rich:dataTable value="#{adocaoController.listAdotados()}" var="animal">
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['animal.adotado.tag']}" />
+						</f:facet>			
+						<h:outputLabel value="#{animal.tag}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['animal.adotado.nome']}" />
+						</f:facet>			
+						<h:outputLabel value="#{animal.nome}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['animal.adotado.data.recolhimento']}" />
+						</f:facet>			
+						<h:outputLabel 
+								value="#{animal.dataRecolhimento}">
+							<f:convertDateTime pattern="dd/MM/yyyy"/>
+						</h:outputLabel>
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['animal.adotado.data.adocao']}" />
+						</f:facet>			
+						<h:outputLabel value="#{animal.dataAdocao != null
+								? animal.dataAdocao : msg['animal.adotado.disponivel']}">
+							<f:convertDateTime pattern="dd/MM/yyyy"/>
+						</h:outputLabel>
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['animal.adotado.dias.ateadocao']}" />
+						</f:facet>
+						<h:outputLabel 
+								value="#{adocaoController.diasAteAdocao(
+											animal.dataRecolhimento, animal.dataAdocao)}" />
+					</rich:column>				
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['animal.adotado.dias.adotado']}" />
+						</f:facet>
+						<h:outputLabel 
+								value="#{adocaoController.diasAdotado(animal.dataAdocao)}" />
+					</rich:column>				
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['animal.adotado.genero']}" />
+						</f:facet>			
+						<h:outputLabel value="#{animal.genero}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['animal.adotado.sexo']}" />
+						</f:facet>	
+						<h:outputLabel value="#{animal.sexo}" />
+					</rich:column>			
+					<rich:column class="center">
+						<f:facet name="header">
+							<h:outputText value="#{msg['animal.adotado.retornar']}" />
+						</f:facet>					
+		                <a4j:commandLink render="@none" execute="@this" 
+			                    oncomplete="#{rich:component('confirmReturn')}.show()">
+		                    <h:graphicImage name="img/return.png" alt="return" />
+		                    <f:setPropertyActionListener value="#{animal}" 
+		                    	target="#{adocaoController.animal}" />
+		                </a4j:commandLink>	                  
+					</rich:column>				
+				</rich:dataTable>		
+			</rich:panel>			
+				
+		</h:panelGrid>
+
+        <a4j:jsFunction name="remove" action="#{animalController.delete()}" render="panelLivre panelAdotados" execute="@this"
+            	oncomplete="#{rich:component('confirmPanel')}.hide();" />
+            	
+        <a4j:jsFunction name="adotar" action="#{adocaoController.adotar}" 
+        		render="panelLivre panelAdotados" execute="@this"
+            	oncomplete="#{rich:component('confirmAdocao')}.hide(); 
+            		#{rich:component('modalAdocao')}.hide();" />	            			
+
+        <a4j:jsFunction name="retornar" action="#{adocaoController.retornar}" 
+        		render="panelLivre panelAdotados" execute="@this"
+            	oncomplete="#{rich:component('confirmReturn')}.hide();" />
+
+        <rich:popupPanel id="confirmReturn" autosized="true">
+            	#{msg['animal.confirm.return']}
+            <a4j:commandButton value="#{msg['animal.btn.cancelar']}" 
+            		onclick="#{rich:component('confirmReturn')}.hide(); return false;" />
+            <a4j:commandButton value="#{msg['animal.btn.retornar']}" onclick="retornar(); return false;" />
+        </rich:popupPanel>	
 		
         <rich:popupPanel id="confirmPanel" autosized="true">
             	#{msg['animal.confirm.text']}
             <a4j:commandButton value="#{msg['animal.btn.cancelar']}" 
             		onclick="#{rich:component('confirmPanel')}.hide(); return false;" />
             <a4j:commandButton value="#{msg['animal.btn.excluir']}" onclick="remove(); return false;" />
-        </rich:popupPanel>				
+        </rich:popupPanel>						
+
+        <rich:popupPanel id="confirmAdocao" autosized="true">
+            	#{msg['animal.popup.confirmaadocao']}
+            <a4j:commandButton value="#{msg['animal.btn.cancelar']}" 
+            		onclick="#{rich:component('confirmAdocao')}.hide(); return false;" />
+            <a4j:commandButton value="#{msg['animal.popup.btn.adotar']}" 
+            		onclick="adotar(); return false;" />
+        </rich:popupPanel>
+		
+	   <rich:hotKey key="Esc">
+	        <rich:componentControl target="modalAdocao" operation="hide" />
+	   </rich:hotKey>		
+		
+	    <rich:popupPanel id="modalAdocao" modal="true" autosized="true">
+
+	        <f:facet name="controls">
+	            <h:outputLink value="#" onclick="#{rich:component('modalAdocao')}.hide(); return false;"
+	            		style="color: inherit">X</h:outputLink>
+	        </f:facet>
+	        
+ 	        <h:outputLabel value="#{msg['animal.popup.adotantes']}" />
+	 
+			<rich:dataTable value="#{adotanteController.list()}" var="adotante">
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="#{msg['adotante.list.nome']}" />
+					</f:facet>			
+					<h:outputLabel value="#{adotante.nome}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="#{msg['adotante.list.rg']}" />
+					</f:facet>			
+					<h:outputLabel value="#{adotante.rg}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="#{msg['adotante.list.cpf']}" />
+					</f:facet>			
+					<h:outputLabel value="#{adotante.cpf}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="#{msg['adotante.list.data.nascimento']}" />
+					</f:facet>			
+					<h:outputLabel value="#{adotante.dataNascimento}">
+						<f:convertDateTime pattern="dd/MM/yyyy"/>
+					</h:outputLabel>
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="#{msg['adotante.list.telefone']}" />
+					</f:facet>			
+					<h:outputLabel value="#{adotante.telefone}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="#{msg['adotante.list.sexo']}" />
+					</f:facet>			
+					<h:outputLabel value="#{adotante.sexo}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="#{msg['adotante.list.endereco']}" />
+					</f:facet>			
+					<h:outputLabel value="#{adotante.endereco}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="#{msg['adotante.list.bairro']}" />
+					</f:facet>			
+					<h:outputLabel value="#{adotante.bairro}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="#{msg['adotante.list.numero']}" />
+					</f:facet>			
+					<h:outputLabel value="#{adotante.numero}" />
+				</rich:column>						
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="#{msg['adotante.list.quantidade.animais']}" />
+					</f:facet>			
+					<h:outputLabel value="#{adotante.quantidadeDeAnimais}" />
+				</rich:column>					
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="#{msg['adotante.list.quantidade.moradores']}" />
+					</f:facet>			
+					<h:outputLabel value="#{adotante.quantMoradores}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="#{msg['adotante.list.area']}" />
+					</f:facet>			
+					<h:outputLabel value="#{adotante.areaLocal}" />
+				</rich:column>
+				<rich:column>
+	                <a4j:commandLink render="@none" execute="@this" 
+	                		oncomplete="#{rich:component('confirmAdocao')}.show()">
+	                    <h:graphicImage name="img/ok.png" alt="ok" />
+	                    <f:setPropertyActionListener value="#{adotante}" 
+	                    		target="#{adocaoController.adotante}" />
+	                </a4j:commandLink>	         									
+				</rich:column>																							
+			</rich:dataTable>		 	
+	 
+	    </rich:popupPanel>		
 		
 	</h:form>
 	

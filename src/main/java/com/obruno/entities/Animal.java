@@ -8,6 +8,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -21,26 +23,30 @@ public class Animal {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@NotEmpty(message="Nome do animal é obrigatório")
+	@NotEmpty(message = "Nome do animal é obrigatório")
 	private String nome;
 
-	@NotNull(message="Data do recolhimento do animal é obrigatória!")
+	@NotNull(message = "Data do recolhimento do animal é obrigatória!")
 	@Column(name = "data_recolhimento")
 	private Date dataRecolhimento;
 
 	@Column(name = "data_adocao")
 	private Date dataAdocao;
 
-	@NotEmpty(message="Tag de identificação do animal é obrigatória!")
+	@NotEmpty(message = "Tag de identificação do animal é obrigatória!")
 	private String tag;
 
-	@NotNull(message="Sexo do animal é obrigatório!")
+	@NotNull(message = "Sexo do animal é obrigatório!")
 	@Enumerated()
 	private SexoAnimal sexo;
 
-	@NotNull(message="Gênero do animal é obrigatório!")
+	@NotNull(message = "Gênero do animal é obrigatório!")
 	@Enumerated()
 	private Genero genero;
+
+	@ManyToOne()
+	@JoinColumn(name = "adotante_id")
+	private Adotante adotante;
 
 	public Integer getId() {
 		return id;
@@ -98,10 +104,19 @@ public class Animal {
 		this.genero = genero;
 	}
 
+	public Adotante getAdotante() {
+		return adotante;
+	}
+
+	public void setAdotante(Adotante adotante) {
+		this.adotante = adotante;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((adotante == null) ? 0 : adotante.hashCode());
 		result = prime * result + ((dataAdocao == null) ? 0 : dataAdocao.hashCode());
 		result = prime * result + ((dataRecolhimento == null) ? 0 : dataRecolhimento.hashCode());
 		result = prime * result + ((genero == null) ? 0 : genero.hashCode());
@@ -121,6 +136,11 @@ public class Animal {
 		if (getClass() != obj.getClass())
 			return false;
 		Animal other = (Animal) obj;
+		if (adotante == null) {
+			if (other.adotante != null)
+				return false;
+		} else if (!adotante.equals(other.adotante))
+			return false;
 		if (dataAdocao == null) {
 			if (other.dataAdocao != null)
 				return false;
@@ -156,7 +176,8 @@ public class Animal {
 	@Override
 	public String toString() {
 		return "Animal [id=" + id + ", nome=" + nome + ", dataRecolhimento=" + dataRecolhimento + ", dataAdocao="
-				+ dataAdocao + ", tag=" + tag + ", sexo=" + sexo + ", genero=" + genero + "]";
+				+ dataAdocao + ", tag=" + tag + ", sexo=" + sexo + ", genero=" + genero + ", adotante=" + adotante
+				+ "]";
 	}
 
 }

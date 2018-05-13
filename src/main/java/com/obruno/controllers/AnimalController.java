@@ -1,6 +1,7 @@
 package com.obruno.controllers;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -18,6 +19,8 @@ import com.obruno.services.AnimalService;
 @ViewScoped
 public class AnimalController {
 	
+	private final Logger logger = Logger.getLogger(
+			this.getClass().getName());
 	private Animal animal;
 	
 	@EJB
@@ -25,6 +28,7 @@ public class AnimalController {
 	
 	@PostConstruct
 	public void init() {
+		logger.info("init()");
 		if (this.animal == null)
 			this.animal = new Animal();
 	}
@@ -32,9 +36,11 @@ public class AnimalController {
 	public void addOrEdit(Animal animal) {
 		
 		if (animal.getId() == null) {
+			logger.info("Criando animal");
 			service.add(animal);
 			addMessage("Animal salvo com sucesso!", FacesMessage.SEVERITY_INFO);						
 		} else {
+			logger.info("Salvando animal");
 			service.merge(animal);
 			addMessage("Animal alterado com sucesso!", FacesMessage.SEVERITY_INFO);			
 		}
@@ -43,15 +49,19 @@ public class AnimalController {
 	}
 	
 	public void delete() {
+		logger.info("Removendo animal");
 		service.remove(getAnimal());
 		clear();
 	}
 	
 	public String home() {
+		logger.info("home.xhtml");
+		setAnimal(null);
 		return "home?faces-redirect=true";
 	}
 	
 	public void clear() {
+		logger.info("Limpando animal");
 		getAnimal().setId(null);
 		getAnimal().setDataAdocao(null);
 		getAnimal().setDataRecolhimento(null);

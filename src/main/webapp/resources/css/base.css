@@ -5,3 +5,7 @@
 .btn-primary {
 	color: white !important;
 }
+
+.w-all {
+	width: calc(100%);
+}
